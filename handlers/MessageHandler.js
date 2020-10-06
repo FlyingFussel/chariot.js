@@ -50,14 +50,17 @@ class MessageHandler {
                 });
             }
 
-            /* Check if the user has adequate permissions */
-            const pendingUserPermissions = (!command.userPermissions) ? false : command.userPermissions;
+            /* Check if the user has adequate permissions, exclude owner */
             let missingUserPermissions = [];
+            
+            if (!this.chariot.chariotOptions.chariotConfig.owner.includes(message.author.id)) {
+                const pendingUserPermissions = (!command.userPermissions) ? false : command.userPermissions;
 
-            if (pendingUserPermissions) {
-                for (let j = 0; j < pendingUserPermissions.length; j++) {
-                    if (!message.member.permission.has(pendingUserPermissions[j])) {
-                        missingUserPermissions.push(Util.formatPermission(pendingUserPermissions[j]));
+                if (pendingUserPermissions) {
+                    for (let j = 0; j < pendingUserPermissions.length; j++) {
+                        if (!message.member.permission.has(pendingUserPermissions[j])) {
+                            missingUserPermissions.push(Util.formatPermission(pendingUserPermissions[j]));
+                        }
                     }
                 }
             }
